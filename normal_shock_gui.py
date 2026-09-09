@@ -21,6 +21,8 @@ Standard library only (tkinter).   Run with:   python normal_shock_gui.py
 
 import csv
 import math
+import os
+import sys
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
@@ -279,6 +281,7 @@ class ShockApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Normal Shock Calculator  -  Hypersonic Flow")
+        self._set_window_icon()
         self.geometry("1120x720")
         self.minsize(900, 600)
 
@@ -327,6 +330,18 @@ class ShockApp(tk.Tk):
         if g <= 1.0:
             raise ValueError("gamma must be greater than 1.")
         return g
+
+    def _set_window_icon(self):
+        """Show shock.ico in the title bar / task bar when it is available
+        (works both when run from source and from the packaged .exe)."""
+        base = getattr(sys, "_MEIPASS",
+                       os.path.dirname(os.path.abspath(__file__)))
+        path = os.path.join(base, "shock.ico")
+        if os.path.exists(path):
+            try:
+                self.iconbitmap(path)
+            except tk.TclError:
+                pass
 
     # ---------------- tab 1: single point ----------------
     def _build_single_tab(self):
